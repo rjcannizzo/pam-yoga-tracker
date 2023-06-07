@@ -1,0 +1,55 @@
+
+Phase 1
+    1 page app
+    data entry field
+    view summary in Dataframe: total hours, total income, number of sessions taught
+
+===
+Notes:
+Session State is a way to share variables between reruns, for each user session. 
+In addition to the ability to store and persist state, Streamlit also exposes the ability to manipulate state using Callbacks. 
+Session state also persists across apps inside a multipage app.
+
+For details on the Session State and Callbacks API, please refer to our Session State API Reference Guide.
+https://docs.streamlit.io/library/api-reference/session-state
+
+** Order of execution: When updating Session state in response to events, a callback function gets executed first, and then the app is executed from top to bottom.
+
+** adding a key to a form widget will add the widget's value to Session State API
+example: st.time_input(label='Enter the time', value=datetime.datetime.now().time(), key='update_time')
+
+Callbacks
+def increment_counter(increment_value):
+    st.session_state.count += increment_value
+
+increment = st.button('Increment', on_click=increment_counter,
+    args=(increment_value, ))
+
+with KWARGS
+
+st.button('Increment', on_click=increment_counter,
+    kwargs=dict(increment_value=5))
+===
+
+*** Forms and Session State: We can update session state with a form submit button and a callback
+
+import streamlit as st
+import datetime
+
+st.title('Counter Example')
+if 'count' not in st.session_state:
+    st.session_state.count = 0
+    st.session_state.last_updated = datetime.time(0,0)
+
+def update_counter():
+    st.session_state.count += st.session_state.increment_value
+    st.session_state.last_updated = st.session_state.update_time
+
+with st.form(key='my_form'):
+    st.time_input(label='Enter the time', value=datetime.datetime.now().time(), key='update_time')
+    st.number_input('Enter a value', value=0, step=1, key='increment_value')
+    submit = st.form_submit_button(label='Update', on_click=update_counter)
+
+st.write('Current Count = ', st.session_state.count)
+st.write('Last Updated = ', st.session_state.last_updated)
+
