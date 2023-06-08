@@ -1,8 +1,18 @@
 
 Phase 1
     1 page app
-    data entry field
+    data entry field for new records
     view summary in Dataframe: total hours, total income, number of sessions taught
+    st.success('msg'), st.warning, st.error, st.exception, st.info
+    st.ballons
+    st.spinner on load?
+    st.cache_resource(mongo_client): https://docs.streamlit.io/library/advanced-features/caching
+
+    TODO
+        - connect Mongo with st.cache_resource
+        - run query to get all records and display
+        - run query for total hours, total income, number of sessions taught
+        - add success and warning messages
 
 ===
 Notes:
