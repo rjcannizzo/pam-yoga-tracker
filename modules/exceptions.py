@@ -1,0 +1,2 @@
+class YogaException(Exception):
+    pass
