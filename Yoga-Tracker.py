@@ -23,11 +23,11 @@ def get_data(query, projection) -> pymongo.cursor.Cursor:
     items = collection.find(query, projection)    
     return items
 
-def get_all_records():
+def get_all_records_as_dataframe() -> pd.DataFrame:
     """Revise to return all records and display in another function""" 
     records = get_data(query={}, projection={'_id': 0})    
-    df = pd.DataFrame(records)
-    st.write(df)
+    return pd.DataFrame(records)
+    
     
     
 def aggregate_query(pipeline):
@@ -61,13 +61,15 @@ def display_summary_data(data):
     total_minutes = data.get('total_minutes', 0)
     total_pay = data.get('total_pay', 0)
     sessions = data.get('sessions', 0)
-    st.write(total_minutes)
-    st.write(total_pay)
-    st.write(sessions)
-
+    data = [
+        {"Sessions": {sessions}, "Hours": [f"{total_minutes / 60:.2f}"], "Total Pay": [f"${total_pay:.2f}"]}        
+    ]
+    df = pd.DataFrame(data, index=['Totals'])
+    st.header("Summary")
+    df
 
 def main():
-    st.header('Yoga Teaching Tracker')
+    st.title('Yoga Teaching Tracker')
     message_area = st.empty()
     
     if 'mongo_client' not in st.session_state:
@@ -78,8 +80,7 @@ def main():
     except YogaException as e:
         st.error(f"The app has encountered an error: {e}")
 
-    get_all_records()
-    message_area.success('Success!!')
-    st.balloons()
+    all_df = get_all_records_as_dataframe()    
+    # st.balloons()
     
 main()

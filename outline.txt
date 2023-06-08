@@ -4,8 +4,7 @@ Phase 1
     data entry field for new records
     view summary in Dataframe: total hours, total income, number of sessions taught
     st.success('msg'), st.warning, st.error, st.exception, st.info
-    st.ballons
-    st.spinner on load?
+    st.ballons   
     st.cache_resource(mongo_client): https://docs.streamlit.io/library/advanced-features/caching
 
     TODO
@@ -13,6 +12,12 @@ Phase 1
         - run query to get all records and display
         - run query for total hours, total income, number of sessions taught
         - add success and warning messages
+    
+Phase 2
+    - Display Summary data by default
+    - Create checkbox to choose which data to display
+    - Can I add st.empty (message_area) to st.session_state to use in any function
+    - read: https://docs.streamlit.io/library/api-reference/data/st.column_config
 
 ===
 Notes:
