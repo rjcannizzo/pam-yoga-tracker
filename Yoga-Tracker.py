@@ -2,11 +2,11 @@ import os
 import streamlit as st
 import pandas as pd
 import pymongo
+import datetime
 import dotenv
 
 from modules.exceptions import YogaException
 
-dotenv.load_dotenv('.env')
 
 @st.cache_resource
 def get_mongo_client():
@@ -16,6 +16,7 @@ def get_mongo_client():
     client = pymongo.MongoClient(URI)    
     return client
 
+
 def get_data(query, projection) -> pymongo.cursor.Cursor:
     """Retrieve data from mongo database. Cursor returns dictionaries during iteration."""
     client = st.session_state['mongo_client']
@@ -23,14 +24,15 @@ def get_data(query, projection) -> pymongo.cursor.Cursor:
     items = collection.find(query, projection)    
     return items
 
+
 def get_all_records_as_dataframe() -> pd.DataFrame:
     """Revise to return all records and display in another function""" 
     records = get_data(query={}, projection={'_id': 0})    
-    return pd.DataFrame(records)
-    
+    return pd.DataFrame(records)    
     
     
 def aggregate_query(pipeline):
+    """Runs an aggregation query"""
     client = st.session_state['mongo_client']
     collection = client.pam.yoga    
     return collection.aggregate(pipeline)
@@ -67,9 +69,19 @@ def display_summary_data(data):
     df = pd.DataFrame(data, index=['Totals'])
     st.header("Summary")
     df
+    
+
+def insert_record(data: dict):
+    """""" 
+    # data ={'date': datetime.datetime.now(), 'duration': 75, 'studio': "Mindful Motion", "type": 'Test', 'pay': 30}
+    client = st.session_state['mongo_client']
+    collection = client.pam.yoga    
+    id = collection.insert_one(data).inserted_id
+    return id
 
 def main():
-    st.title('Yoga Teaching Tracker')
+    dotenv.load_dotenv('.env')
+    st.title('Yoga Teaching Tracker 🙏 🧘‍♂️')
     message_area = st.empty()
     
     if 'mongo_client' not in st.session_state:
@@ -80,7 +92,8 @@ def main():
     except YogaException as e:
         st.error(f"The app has encountered an error: {e}")
 
-    all_df = get_all_records_as_dataframe()    
+    all_df = get_all_records_as_dataframe()
+    # insert_record()
     # st.balloons()
     
 main()
