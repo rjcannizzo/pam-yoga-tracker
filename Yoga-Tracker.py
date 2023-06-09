@@ -43,10 +43,11 @@ def get_summary_data() -> dict:
     pipeline = [
         {
             '$group': {
-                '_id': None, # required
+                '_id': None, # _id is required
                 'total_minutes': {'$sum': '$duration'},
                 'total_pay': {'$sum': '$pay'},
-                'sessions': {'$count':{}}
+                'sessions': {'$count':{}},
+                'total_students': {'$sum': '$students'}
             }
         }
     ]
@@ -63,8 +64,9 @@ def display_summary_data(data):
     total_minutes = data.get('total_minutes', 0)
     total_pay = data.get('total_pay', 0)
     sessions = data.get('sessions', 0)
+    students = data.get('total_students', 0)
     data = [
-        {"Sessions": {sessions}, "Hours": [f"{total_minutes / 60:.2f}"], "Total Pay": [f"${total_pay:.2f}"]}        
+        {"Classes": sessions, "Hours": f"{total_minutes / 60:.2f}", "Income": f"${total_pay:.2f}", "Students": students}        
     ]
     df = pd.DataFrame(data, index=['Totals'])
     st.header("Summary")
@@ -77,11 +79,13 @@ def insert_record(data: dict):
     client = st.session_state['mongo_client']
     collection = client.pam.yoga    
     id = collection.insert_one(data).inserted_id
+    # st.balloons()
     return id
+
 
 def main():
     dotenv.load_dotenv('.env')
-    st.title('Yoga Teaching Tracker 🙏 🧘‍♂️')
+    st.title('Yoga Teaching Tracker 🙏')
     message_area = st.empty()
     
     if 'mongo_client' not in st.session_state:
@@ -94,6 +98,6 @@ def main():
 
     all_df = get_all_records_as_dataframe()
     # insert_record()
-    # st.balloons()
+    
     
 main()
