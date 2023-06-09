@@ -24,10 +24,10 @@ Phase 3
 Phase 4
     - get class types from db and display in form
 
-Phase 5
+Phase 6
     - download csv
 
-Phase 6
+Phase 5
     - change favicon and "title" of page (see https://docs.streamlit.io/library/api-reference/utilities/st.set_page_config)
 
 Phase 7

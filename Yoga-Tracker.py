@@ -128,6 +128,7 @@ def display_message(msg: str, msg_type: str):
 
 def main():
     dotenv.load_dotenv('.env')
+    st.set_page_config(page_title='Yoga Tracker', page_icon="🙏", layout="centered", initial_sidebar_state="auto", menu_items=None)
     st.title('Yoga Teaching Tracker 🙏')    
     st.session_state['message_area'] = st.empty()
     
