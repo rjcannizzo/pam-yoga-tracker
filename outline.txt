@@ -14,10 +14,13 @@ Phase 1
         - add success and warning messages
     
 Phase 2
-    - Display Summary data by default
-    - Create checkbox to choose which data to display
-    - Can I add st.empty (message_area) to st.session_state to use in any function
+    - Display Summary data by default    
+    
+    
+Phase 3
+    - add form to insert new records
     - read: https://docs.streamlit.io/library/api-reference/data/st.column_config
+    - How can I display st.info, error, success, etc in display_message()?
 
 ===
 Notes:
