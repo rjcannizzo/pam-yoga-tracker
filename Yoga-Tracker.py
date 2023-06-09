@@ -44,9 +44,7 @@ def get_data(query, projection) -> pymongo.cursor.Cursor:
 
 @st.cache_resource
 def get_mongo_client():
-    DATABASE = "PAM"
-    MONGO_PASSWORD = os.environ.get('MONGO_PASSWORD')
-    URI = f"mongodb+srv://rc:{MONGO_PASSWORD}@apps.sdrf5qb.mongodb.net/{DATABASE}"   
+    URI = os.environ.get('URI')
     return pymongo.MongoClient(URI)
     
     
@@ -76,8 +74,7 @@ def insert_record(data: dict):
     # data ={'date': datetime.datetime.now(), 'duration': 75, 'studio': "Mindful Motion", "type": 'Test', 'pay': 30, students: 101}
     client = st.session_state['mongo_client']
     collection = client.pam.yoga    
-    id = collection.insert_one(data).inserted_id
-    # st.balloons()
+    id = collection.insert_one(data).inserted_id    
     return id
 
 def display_message(msg: str, msg_type: str):
