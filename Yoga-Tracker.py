@@ -18,7 +18,7 @@ def aggregate_query(pipeline):
 def display_new_record_form():
     """Displays the form used to enter new records."""
     with st.form("add_record_form"):
-        st.header("Add a New Record")
+        st.header("Add New Record")
         st.date_input("Date", value=None, min_value=None, max_value=None, key="date_new", help=None, on_change=None, args=None, kwargs=None)
         st.number_input("Minutes", min_value=1, max_value=600, value=75, step=None, format=None, key="minutes_new", help=None, on_change=None)
         st.number_input("Pay", min_value=0, max_value=1000, value=30, step=None, format=None, key="pay_new", help=None, on_change=None)
@@ -38,8 +38,7 @@ def process_new_record():
     date = datetime.datetime.combine(st.session_state.date_new, datetime.time(hour=0, minute=0, second=0))
     data = {'date': date, 'duration': minutes, 'studio': studio, "type": class_type, 'pay': pay, 'students': students}
     _id = insert_record(data)
-    if _id:
-        display_message('Success! New record added...', 'info')
+    if _id:        
         st.balloons()        
     else:
         display_message('Error inserting record', 'error')
@@ -54,7 +53,7 @@ def display_summary_data(data):
         {"Classes": sessions, "Hours": f"{total_minutes / 60:.2f}", "Income": f"${total_pay:.2f}", "Students": students}        
     ]
     df = pd.DataFrame(data, index=['Totals'])
-    st.header("Summary")
+    st.header("Totals")
     df
 
 
@@ -70,6 +69,7 @@ def get_data(query, projection) -> pymongo.cursor.Cursor:
     collection = client.pam.yoga
     items = collection.find(query, projection)    
     return items   
+
 
 @st.cache_resource
 def get_mongo_client():
@@ -110,7 +110,6 @@ def insert_record(data: dict):
         print(e)  
 
 
-
 def display_message(msg: str, msg_type: str):
     """
     Display a message at the top of the app in the 'message_area' declared in main() using st.empty()
@@ -123,9 +122,8 @@ def display_message(msg: str, msg_type: str):
 
 def main():
     dotenv.load_dotenv('.env')
-    st.title('Yoga Teaching Tracker 🙏')
-    message_area = st.empty()
-    st.session_state['message_area'] = message_area
+    st.title('Yoga Teaching Tracker 🙏')    
+    st.session_state['message_area'] = st.empty()
     
     if 'mongo_client' not in st.session_state:
         st.session_state['mongo_client'] = get_mongo_client()
@@ -136,8 +134,7 @@ def main():
         st.error(f"The app has encountered an error: {e}")
 
     display_new_record_form()
-    # all_df = get_all_records_as_dataframe()
-    display_message('testing....', 'info')
-    
+    # all_df = get_all_records_as_dataframe()    
+    # display_message('testing!!!', 'success')
     
 main()

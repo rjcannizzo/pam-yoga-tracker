@@ -2,12 +2,14 @@
 
 1. Set page config (favicon, title, etc)
     https://docs.streamlit.io/library/api-reference/utilities/st.set_page_config
-2. explore styling options including containers for organization
+2. explore styling options 
+    https://docs.streamlit.io/library/advanced-features/theming
 3. Use sidebar for options?
     https://docs.streamlit.io/library/api-reference/layout/st.sidebar
 4. Use tabs?
     - https://docs.streamlit.io/library/api-reference/layout/st.tabs
 5. Use an expander?
     Insert a multi-element container that can be expanded/collapsed.
-    https://docs.streamlit.io/library/api-reference/layout/st.expander
-    
+    https://docs.streamlit.io/library/api-reference/layout/st.expander    
+6. Download csv
+    https://docs.streamlit.io/knowledge-base/using-streamlit/how-download-pandas-dataframe-csv

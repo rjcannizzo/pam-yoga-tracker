@@ -14,13 +14,21 @@ Phase 1
         - add success and warning messages
     
 Phase 2
-    - Display Summary data by default    
-    
+    - Display Summary data by default       
     
 Phase 3
     - add form to insert new records
     - read: https://docs.streamlit.io/library/api-reference/data/st.column_config
     - How can I display st.info, error, success, etc in display_message()?
+
+Phase 4
+    - get class types from db and display in form
+
+Phase 5
+    - download csv
+
+Phase 6
+    - change favicon and "title" of page (see https://docs.streamlit.io/library/api-reference/utilities/st.set_page_config)
 
 ===
 Notes:
