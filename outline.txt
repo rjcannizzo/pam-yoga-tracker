@@ -30,6 +30,10 @@ Phase 5
 Phase 6
     - change favicon and "title" of page (see https://docs.streamlit.io/library/api-reference/utilities/st.set_page_config)
 
+Phase 7
+    - remove index from Summary dataframe
+    - https://docs.streamlit.io/knowledge-base/using-streamlit/hide-row-indices-displaying-dataframe
+
 ===
 Notes:
 Session State is a way to share variables between reruns, for each user session. 

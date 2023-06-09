@@ -23,7 +23,7 @@ def display_new_record_form():
         st.number_input("Minutes", min_value=1, max_value=600, value=75, step=None, format=None, key="minutes_new", help=None, on_change=None)
         st.number_input("Pay", min_value=0, max_value=1000, value=30, step=None, format=None, key="pay_new", help=None, on_change=None)
         st.selectbox("Studio", ["Mindful Motion"], index=0, key="studio_new", help=None, on_change=None)
-        st.selectbox("Type", ["Restorative", "Test"], index=0, key="class_new", help=None, on_change=None)
+        st.selectbox("Type", get_yoga_class_types(), index=0, key="class_new", help=None, on_change=None)
         st.number_input("Students", min_value=1, max_value=1000, value=2, step=None, format=None, key="students_new", help=None, on_change=None)        
         st.form_submit_button("Submit", on_click=process_new_record)        
             
@@ -67,10 +67,9 @@ def get_data(query, projection) -> pymongo.cursor.Cursor:
     """Retrieve data from mongo database. Cursor returns dictionaries during iteration."""
     client = st.session_state['mongo_client']
     collection = client.pam.yoga
-    items = collection.find(query, projection)    
-    return items   
-
-
+    return collection.find(query, projection)    
+    
+    
 @st.cache_resource
 def get_mongo_client():
     URI = os.environ.get('URI')
@@ -96,6 +95,13 @@ def get_summary_data() -> dict:
     except IndexError as e:        
         raise YogaException(e)
     return data
+
+def get_yoga_class_types() -> list:
+    """Get all class types for 'class' selectbox used for adding new records"""
+    client = st.session_state['mongo_client']
+    collection = client.pam.class_types
+    items= collection.find({}, {'_id': 0})
+    return sorted([d.get('type') for d in items])
     
 
 def insert_record(data: dict):
@@ -135,6 +141,6 @@ def main():
 
     display_new_record_form()
     # all_df = get_all_records_as_dataframe()    
-    # display_message('testing!!!', 'success')
+    # display_message('testing!!!', 'success')    
     
 main()
