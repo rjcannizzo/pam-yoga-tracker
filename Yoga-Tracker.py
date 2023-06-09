@@ -77,6 +77,7 @@ def insert_record(data: dict):
     id = collection.insert_one(data).inserted_id    
     return id
 
+
 def display_message(msg: str, msg_type: str):
     """
     Display a message at the top of the app in the 'message_area' declared in main() using st.empty()
@@ -85,6 +86,24 @@ def display_message(msg: str, msg_type: str):
     message_area = st.session_state['message_area']
     method = getattr(message_area, msg_type)
     method(msg)
+    
+    
+def display_new_record_form():
+    """Displays the form used to enter new records."""
+    with st.form("add_record_form"):
+        st.header("Add a New Record")
+        st.date_input("Date", value=None, min_value=None, max_value=None, key="date_new", help=None, on_change=None, args=None, kwargs=None)
+        st.number_input("Minutes", min_value=1, max_value=600, value=75, step=None, format=None, key="minutes_new", help=None, on_change=None)
+        st.number_input("Pay", min_value=0, max_value=1000, value=30, step=None, format=None, key="pay_new", help=None, on_change=None)
+        st.selectbox("Studio", ["Mindful Motion"], index=0, key="studio_new", help=None, on_change=None)
+        st.selectbox("Type", ["Restorative"], index=0, key="type_new", help=None, on_change=None)
+        st.number_input("Students", min_value=1, max_value=1000, value=2, step=None, format=None, key="students_new", help=None, on_change=None)
+        
+        submitted = st.form_submit_button("Submit", on_click=None)
+        if submitted:
+            st.write("Submitted!")
+
+    
 
 def main():
     dotenv.load_dotenv('.env')
@@ -102,6 +121,7 @@ def main():
 
     all_df = get_all_records_as_dataframe()
     # insert_record()
-    display_message('testing....', 'info')
+    # display_message('testing....', 'info')
+    display_new_record_form()
     
 main()
