@@ -15,6 +15,16 @@ def aggregate_query(pipeline):
     return collection.aggregate(pipeline)
 
 
+def display_message(msg: str, msg_type: str):
+    """
+    Display a message at the top of the app in the 'message_area' declared in main() using st.empty()
+    msg_type: error, info, success, warning
+    """
+    message_area = st.session_state['message_area']
+    method = getattr(message_area, msg_type)
+    method(msg)    
+
+
 def display_new_record_form():
     """Displays the form used to enter new records."""
     with st.form("add_record_form"):
@@ -25,23 +35,8 @@ def display_new_record_form():
         st.selectbox("Studio", ["Mindful Motion"], index=0, key="studio_new", help=None, on_change=None)
         st.selectbox("Type", get_yoga_class_types(), index=0, key="class_new", help=None, on_change=None)
         st.number_input("Students", min_value=1, max_value=1000, value=2, step=None, format=None, key="students_new", help=None, on_change=None)        
-        st.form_submit_button("Submit", on_click=process_new_record)        
+        st.form_submit_button("Submit", on_click=process_new_record)     
             
-            
-def process_new_record():
-    """Collect form information and insert a new record into the database"""    
-    minutes = st.session_state.minutes_new
-    pay = st.session_state.pay_new
-    studio = st.session_state.studio_new
-    class_type = st.session_state.class_new
-    students = st.session_state.students_new 
-    date = datetime.datetime.combine(st.session_state.date_new, datetime.time(hour=0, minute=0, second=0))
-    data = {'date': date, 'duration': minutes, 'studio': studio, "type": class_type, 'pay': pay, 'students': students}
-    _id = insert_record(data)
-    if _id:        
-        st.balloons()        
-    else:
-        display_message('Error inserting record', 'error')
 
 def display_summary_data(data):
     """Disply summary of classes, hours, income and students in a dataframe"""
@@ -58,7 +53,7 @@ def display_summary_data(data):
 
 
 def get_all_records_as_dataframe() -> pd.DataFrame:
-    """Revise to return all records and display in another function""" 
+    """Return all records and display in another function""" 
     records = get_data(query={}, projection={'_id': 0})    
     return pd.DataFrame(records)
 
@@ -96,6 +91,7 @@ def get_summary_data() -> dict:
         raise YogaException(e)
     return data
 
+
 def get_yoga_class_types() -> list:
     """Get all class types for 'class' selectbox used for adding new records"""
     client = st.session_state['mongo_client']
@@ -113,17 +109,23 @@ def insert_record(data: dict):
         id = collection.insert_one(data).inserted_id
         return id
     except Exception as e:
-        print(e)  
+        print(e)
 
 
-def display_message(msg: str, msg_type: str):
-    """
-    Display a message at the top of the app in the 'message_area' declared in main() using st.empty()
-    msg_type: error, info, success, warning
-    """
-    message_area = st.session_state['message_area']
-    method = getattr(message_area, msg_type)
-    method(msg) 
+def process_new_record():
+    """Collect form information and insert a new record into the database"""    
+    minutes = st.session_state.minutes_new
+    pay = st.session_state.pay_new
+    studio = st.session_state.studio_new
+    class_type = st.session_state.class_new
+    students = st.session_state.students_new 
+    date = datetime.datetime.combine(st.session_state.date_new, datetime.time(hour=0, minute=0, second=0))
+    data = {'date': date, 'duration': minutes, 'studio': studio, "type": class_type, 'pay': pay, 'students': students}
+    _id = insert_record(data)
+    if _id:        
+        st.balloons()        
+    else:
+        display_message('Error inserting record', 'error')
     
 
 def main():
@@ -141,7 +143,6 @@ def main():
         st.error(f"The app has encountered an error: {e}")
 
     display_new_record_form()
-    # all_df = get_all_records_as_dataframe()    
-    # display_message('testing!!!', 'success')    
+ 
     
 main()
